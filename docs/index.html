@@ -3,494 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MyUPIAlert — Free, Offline UPI Voice Soundbox & Analytics for Android</title>
-  <meta name="description" content="Stop paying ₹200/month for hardware soundboxes. Turn any Android phone into an ultra-loud, 100% offline voice soundbox for PhonePe, Google Pay, Paytm, BHIM and Bank SMS with 13 Indian languages.">
-  <meta name="keywords" content="UPI Soundbox, Free UPI soundbox, PhonePe soundbox alternative, Paytm soundbox free, Android voice alert, UPI payment speaker">
+  <title>MyUPIAlert — 3D Glass UI Edition</title>
+  <meta name="description" content="Free, Offline UPI Voice Soundbox & Analytics for Android">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%234F46E5'/><path d='M30 65 L50 35 L70 65 Z' fill='%2306B6D4'/><circle cx='50' cy='42' r='8' fill='%23FFFFFF'/></svg>">
 </head>
 <body>
 
-  <!-- Top Navigation -->
-  <header class="header">
-    <div class="container">
-      <nav class="navbar">
-        <a href="#" class="brand">
-          <div class="brand-icon">
+  <!-- 3D Canvas Background -->
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="content-wrapper">
+    <!-- Navbar -->
+    <nav class="glass-nav">
+      <div class="brand">
+        <div class="brand-logo">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
               <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
             </svg>
-          </div>
-          <span>MyUPIAlert</span>
-        </a>
-
-        <ul class="nav-links">
-          <li><a href="#simulator">Soundbox Demo</a></li>
-          <li><a href="#comparison">Compare vs Box</a></li>
-          <li><a href="#calculator">Savings Calculator</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#languages">13 Languages</a></li>
-          <li><a href="#faq">FAQ</a></li>
-        </ul>
-
-        <div class="nav-actions">
-          <a href="https://github.com/codingwitharul/MyUPIAlert" target="_blank" class="btn btn-secondary btn-sm">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
-            </svg>
-            GitHub
-          </a>
-          <a href="https://github.com/codingwitharul/MyUPIAlert/releases" class="btn btn-primary btn-sm">
-            Download APK
-          </a>
         </div>
-      </nav>
-    </div>
-  </header>
+        <span>MyUPIAlert</span>
+      </div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#demo">Demo</a>
+        <a href="https://github.com/codingwitharul/MyUPIAlert/releases/latest" class="btn-primary glass-btn">Download APK</a>
+      </div>
+    </nav>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="badge-wrapper">
-          <div class="badge">
-            <span class="status-dot"></span>
-            100% Free & Open Source · No Monthly Rental · 100% Offline
-          </div>
-        </div>
+    <!-- Hero Section -->
+    <header class="hero">
+      <div class="hero-text glass-card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
+        <div class="badge">V2.0 Gold Edition</div>
+        <h1>The Ultimate <span class="gradient-text">Offline</span> UPI Soundbox.</h1>
+        <p>Stop paying ₹200/month. Turn your spare Android phone into a high-powered, fully offline voice alert system with real-time financial dashboards.</p>
 
-        <h1 class="hero-title">
-          Stop Paying <span class="gradient-accent">₹200/Month</span> For Soundboxes.<br>
-          <span class="gradient-text">Install Free UPI Voice Alerts on Any Phone.</span>
-        </h1>
-
-        <p class="hero-subtitle">
-          Turn your spare smartphone or counter tablet into an ultra-loud, intelligent voice soundbox. Instant payment announcements for <strong>PhonePe, Google Pay, Paytm, BHIM & Bank SMS</strong> with 200% hardware loudness boost, 13 Indian languages, and zero monthly fees.
-        </p>
-
-        <div class="hero-cta">
-          <a href="https://github.com/codingwitharul/MyUPIAlert/releases" class="btn btn-accent btn-lg">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-            Download Free APK (v2.0)
+        <div class="hero-actions">
+          <a href="https://github.com/codingwitharul/MyUPIAlert/releases/latest" class="btn-primary glow-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Download Free
           </a>
-          <a href="#simulator" class="btn btn-secondary btn-lg">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="5 3 19 12 5 21 5 3"></polygon>
-            </svg>
-            Test Live Soundbox Demo
+          <a href="https://github.com/codingwitharul/MyUPIAlert" class="btn-secondary glass-btn">
+            View Source
           </a>
         </div>
       </div>
+    </header>
 
-      <!-- Quick Metrics Bar -->
-      <div class="stats-bar">
-        <div class="stat-card">
-          <div class="stat-value gradient-accent">₹0</div>
-          <div class="stat-label">Monthly Rental Forever</div>
+    <!-- Features Section -->
+    <section id="features" class="features-grid">
+      <div class="feature-card glass-card" data-tilt data-tilt-max="10" data-tilt-glare data-tilt-max-glare="0.1">
+        <div class="icon-wrapper" style="background: rgba(236,72,153,0.2); color: #EC4899;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
         </div>
-        <div class="stat-card">
-          <div class="stat-value gradient-text">13</div>
-          <div class="stat-label">Indian Languages</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value gradient-accent">+1500 mB</div>
-          <div class="stat-label">200% Hardware Loudness</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value gradient-text">100%</div>
-          <div class="stat-label">Offline & Private</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Interactive Soundbox Simulator -->
-  <section class="demo-section" id="simulator">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-tag">Interactive Audio Simulator</div>
-        <h2 class="section-title">Hear How It Sounds in Your Shop</h2>
-        <p class="section-desc">Test real voice announcements right now in your browser. Customize the amount, sender name, and language.</p>
+        <h3>100% Free Forever</h3>
+        <p>No monthly rental fees, no hidden charges. Just download and use.</p>
       </div>
 
-      <div class="glass simulator-box">
+      <div class="feature-card glass-card" data-tilt data-tilt-max="10" data-tilt-glare data-tilt-max-glare="0.1">
+        <div class="icon-wrapper" style="background: rgba(6,182,212,0.2); color: #06B6D4;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        </div>
+        <h3>13 Indian Languages</h3>
+        <p>Hindi, Tamil, Telugu, Marathi, and more. Localized voice alerts instantly.</p>
+      </div>
+
+      <div class="feature-card glass-card" data-tilt data-tilt-max="10" data-tilt-glare data-tilt-max-glare="0.1">
+        <div class="icon-wrapper" style="background: rgba(79,70,229,0.2); color: #4F46E5;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        </div>
+        <h3>Offline Analytics</h3>
+        <p>Track your daily earnings and insights directly on the device with zero cloud syncing.</p>
+      </div>
+    </section>
+
+    <!-- Interactive Simulator -->
+    <section id="demo" class="simulator-section">
+      <div class="simulator glass-card" data-tilt data-tilt-max="2" data-tilt-glare data-tilt-max-glare="0.1">
+        <h2>Live 3D Soundbox Simulator</h2>
+        <p class="subtitle">Experience the crystal-clear announcements.</p>
+
         <div class="sim-controls">
-          <div class="sim-group">
-            <label class="sim-label" for="simAmount">Payment Amount (₹)</label>
-            <input type="number" id="simAmount" class="sim-input" value="500" min="1" max="100000">
+          <div class="input-group">
+            <label>Amount (₹)</label>
+            <input type="number" id="sim-amount" value="500" class="glass-input">
           </div>
-
-          <div class="sim-group">
-            <label class="sim-label" for="simSender">Customer / Sender Name</label>
-            <input type="text" id="simSender" class="sim-input" value="Rahul" placeholder="e.g. Rahul, Suresh">
+          <div class="input-group">
+            <label>Sender Name</label>
+            <input type="text" id="sim-sender" value="Rahul Kumar" class="glass-input">
           </div>
-
-          <div class="sim-group">
-            <label class="sim-label" for="simLang">Announcement Language</label>
-            <select id="simLang" class="sim-select">
-              <!-- Populated dynamically via JS -->
+          <div class="input-group">
+            <label>Language</label>
+            <select id="sim-language" class="glass-input">
+              <!-- Options populated by JS -->
             </select>
           </div>
-
-          <button id="simPlayBtn" class="btn btn-primary" style="margin-top: 10px; width: 100%; padding: 16px;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-            Play Announcement Aloud
-          </button>
         </div>
 
-        <!-- Phone Mockup -->
-        <div class="sim-phone">
-          <div class="phone-speaker-notch"></div>
-          
-          <div class="phone-card">
-            <div class="pulse-ring"></div>
-            <div class="phone-status-pill">
-              <span class="status-dot"></span>
-              Payment Confirmed
-            </div>
-            <div class="phone-amount" id="phoneAmount">₹500</div>
-            <div class="phone-sender" id="phoneSender">From Rahul · PhonePe / UPI</div>
-            <div class="phone-speech-preview" id="phoneSpeech">"Rahul से 500 रुपये प्राप्त हुए"</div>
-          </div>
+        <button id="sim-play-btn" class="btn-primary glow-btn play-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          Simulate Payment
+        </button>
 
-          <div style="text-align: center; color: var(--text-dim); font-size: 11px;">
-            Powered by MyUPIAlert 100% Offline Speech Engine
-          </div>
+        <div id="sim-transcript" class="transcript-box glass-card">
+          Select options and press play...
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Hardware Soundbox vs MyUPIAlert Comparison -->
-  <section class="comparison-section" id="comparison">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-tag">Direct Comparison</div>
-        <h2 class="section-title">Commercial Hardware vs. MyUPIAlert</h2>
-        <p class="section-desc">Why pay monthly rent for a locked-down box when your Android phone is 10x smarter, louder, and free?</p>
-      </div>
+    <footer>
+      <p>MyUPIAlert v2.0 - Open Source Android Project.</p>
+    </footer>
+  </div>
 
-      <div class="comparison-table-wrapper">
-        <table class="comparison-table">
-          <thead>
-            <tr>
-              <th>Feature</th>
-              <th>Commercial Hardware Box<br><small style="font-weight: 400; text-transform: none; color: var(--text-dim);">(Paytm, PhonePe, Soundpod)</small></th>
-              <th>MyUPIAlert<br><small style="font-weight: 700; text-transform: none; color: #34D399;">(Free Android Solution)</small></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="col-feature">Monthly Rental Fee</td>
-              <td class="col-bad">₹150 – ₹250 / month (₹2,400+/year)</td>
-              <td class="col-good">₹0 Free Forever (MIT Open Source)</td>
-            </tr>
-            <tr>
-              <td class="col-feature">SIM Card & Data Plan</td>
-              <td class="col-bad">Requires separate SIM + monthly cellular recharge</td>
-              <td class="col-good">Uses existing phone Wi-Fi, hotspot, or offline Bank SMS</td>
-            </tr>
-            <tr>
-              <td class="col-feature">Multi-App Support</td>
-              <td class="col-bad">Strictly locked to the vendor's QR code</td>
-              <td class="col-good">Works with ALL UPI Apps + 28 Bank SMS simultaneously</td>
-            </tr>
-            <tr>
-              <td class="col-feature">Cross-Channel Deduplication</td>
-              <td class="col-bad">Not applicable</td>
-              <td class="col-good">Intelligent Twin Filter: Never announces or logs twice</td>
-            </tr>
-            <tr>
-              <td class="col-feature">Hardware Loudness</td>
-              <td class="col-bad">Fixed speaker wattage</td>
-              <td class="col-good">Hardware LoudnessEnhancer +1500 mB (200% boost)</td>
-            </tr>
-            <tr>
-              <td class="col-feature">Language Coverage</td>
-              <td class="col-bad">6 – 8 basic languages</td>
-              <td class="col-good">13 Indian Languages + segmented currency articulation</td>
-            </tr>
-            <tr>
-              <td class="col-feature">Operating Schedule</td>
-              <td class="col-bad">No automatic schedule; announces all night unless unplugged</td>
-              <td class="col-good">Scheduled Store Hours (e.g. 9 AM–9 PM) auto-mutes speech</td>
-            </tr>
-            <tr>
-              <td class="col-feature">Financial Analytics</td>
-              <td class="col-bad">Requires opening separate slow merchant portal apps</td>
-              <td class="col-good">Built-in visual rush-hour heatmap & 1-tap CSV export</td>
-            </tr>
-            <tr>
-              <td class="col-feature">Data Privacy</td>
-              <td class="col-bad">Merchant sales telemetry sent to third-party cloud</td>
-              <td class="col-good">100% Offline; zero network telemetry, zero trackers</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- Savings Calculator -->
-  <section class="demo-section" id="calculator">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-tag">ROI & Savings</div>
-        <h2 class="section-title">Calculate Your Merchant Savings</h2>
-        <p class="section-desc">See how much hard cash stays in your bank account instead of paying soundbox rental bills.</p>
-      </div>
-
-      <div class="glass calculator-card">
-        <div class="calc-sliders">
-          <div class="calc-field">
-            <label>
-              <span>Number of Counters / Stores</span>
-              <span id="calcCountersVal" class="gradient-accent" style="font-weight: 700;">1 Counter</span>
-            </label>
-            <input type="range" id="calcCounters" class="calc-range" min="1" max="10" value="1">
-          </div>
-
-          <div class="calc-field">
-            <label>
-              <span>Duration in Business</span>
-              <span id="calcYearsVal" class="gradient-accent" style="font-weight: 700;">1 Year</span>
-            </label>
-            <input type="range" id="calcYears" class="calc-range" min="1" max="5" value="1">
-          </div>
-
-          <p style="font-size: 13px; color: var(--text-dim); line-height: 1.5;">
-            *Calculated based on standard commercial soundbox rental of ₹175/mo + ₹50/mo SIM data fee per counter (₹2,700/year).
-          </p>
-        </div>
-
-        <div class="calc-result-box">
-          <div style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted);">
-            Total Money Saved
-          </div>
-          <div class="calc-result-number" id="calcTotalSavings">₹2,700</div>
-          <p style="font-size: 13px; color: #A5B4FC; margin-bottom: 18px;">
-            Zero subscriptions. Zero hidden fees.
-          </p>
-          <a href="https://github.com/codingwitharul/MyUPIAlert/releases" class="btn btn-accent btn-sm" style="width: 100%;">
-            Start Saving Today
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Core Features Grid -->
-  <section class="demo-section" id="features">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-tag">Engineered For Merchants</div>
-        <h2 class="section-title">Everything a Shopkeeper Needs</h2>
-        <p class="section-desc">Crafted from the ground up to solve real shop counter challenges: noise, missed alerts, and billing chaos.</p>
-      </div>
-
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-          </div>
-          <h3>Dual SMS & Push Listener</h3>
-          <p>Catches instant notifications from UPI apps as well as transactional SMS from 28+ banks. If internet drops at your stall, bank SMS still triggers instant voice alerts.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-          </div>
-          <h3>Cross-Channel Deduplication</h3>
-          <p>When both an app push and bank SMS arrive for the same transaction, the smart twin deduplicator absorbs the companion alert without double speaking or double logging.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-          </div>
-          <h3>200% Loudness Boost (+1500 mB)</h3>
-          <p>Hooks directly into the Android hardware LoudnessEnhancer to blast clear, crisp announcements that cut through loud street markets, horns, and customer chatter.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          </div>
-          <h3>Scheduled Operating Hours</h3>
-          <p>Set your store opening and closing times (e.g. 9:00 AM to 9:00 PM). Incoming late-night payments are recorded safely in the database while speech is silenced automatically.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-          </div>
-          <h3>Hourly Rush-Hour Analytics</h3>
-          <p>Dedicated analytics screen with peak rush-hour heatmap, average customer ticket size, UPI app volume breakdown, and 1-tap CSV statement export for your accountant.</p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-icon-box">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-          </div>
-          <h3>100% Offline & Private</h3>
-          <p>No account creation, no cloud backend, zero internet telemetry. All parsing, text-to-speech synthesis, and database operations happen 100% on your Android device.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 13 Indian Languages Matrix -->
-  <section class="demo-section" id="languages">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-tag">Vocal Inclusivity</div>
-        <h2 class="section-title">Speaks in 13 Indian Languages</h2>
-        <p class="section-desc">Click any language below to test its native voice announcement in the live simulator.</p>
-      </div>
-
-      <div class="lang-grid" id="langGrid">
-        <!-- Populated via JS -->
-      </div>
-    </div>
-  </section>
-
-  <!-- 3-Step Setup Guide -->
-  <section class="demo-section">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-tag">Quick Start</div>
-        <h2 class="section-title">Ready in Less Than 2 Minutes</h2>
-        <p class="section-desc">No technicians, no wiring, no KYC contracts.</p>
-      </div>
-
-      <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-        <div class="feature-card" style="text-align: center;">
-          <div style="font-size: 32px; font-weight: 800; color: var(--secondary); margin-bottom: 12px;">01</div>
-          <h3>Install Free APK</h3>
-          <p>Download the lightweight APK directly from GitHub Releases and install it on any device running Android 7.0 to 15.</p>
-        </div>
-
-        <div class="feature-card" style="text-align: center;">
-          <div style="font-size: 32px; font-weight: 800; color: var(--primary-light); margin-bottom: 12px;">02</div>
-          <h3>Grant Permissions</h3>
-          <p>Enable Notification Access and SMS Receiver permissions so MyUPIAlert can read incoming payments automatically.</p>
-        </div>
-
-        <div class="feature-card" style="text-align: center;">
-          <div style="font-size: 32px; font-weight: 800; color: var(--accent); margin-bottom: 12px;">03</div>
-          <h3>Place at Billing Counter</h3>
-          <p>Pick your language and volume. Optionally connect to your counter's Bluetooth speaker. You're now live!</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ Section -->
-  <section class="demo-section" id="faq">
-    <div class="container">
-      <div class="section-head">
-        <div class="section-tag">Got Questions?</div>
-        <h2 class="section-title">Frequently Asked Questions</h2>
-        <p class="section-desc">Common questions merchants ask before switching to MyUPIAlert.</p>
-      </div>
-
-      <div class="faq-list">
-        <div class="faq-item">
-          <div class="faq-question">
-            <span>Do I need an active internet connection or SIM card on the soundbox phone?</span>
-            <span class="faq-chevron">▼</span>
-          </div>
-          <div class="faq-answer">
-            No! If you place a phone with your registered bank SIM card, MyUPIAlert parses incoming bank SMS fully offline without requiring any internet or data plan. If you use Wi-Fi or mobile data, push notifications from PhonePe, Google Pay, and Paytm work instantly as well.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">
-            <span>Can I connect the phone to an external Bluetooth speaker?</span>
-            <span class="faq-chevron">▼</span>
-          </div>
-          <div class="faq-answer">
-            Yes. MyUPIAlert includes a Bluetooth Keep-Alive feature that prevents counter speakers from entering sleep mode, ensuring the first second of speech is never clipped.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">
-            <span>What happens if both an app notification and an SMS arrive for the same payment?</span>
-            <span class="faq-chevron">▼</span>
-          </div>
-          <div class="faq-answer">
-            MyUPIAlert features an intelligent Cross-Channel Deduplication engine. The first alert is announced aloud, and the companion alert within 3 minutes is silently absorbed. It will never repeat the announcement or double-count your revenue.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">
-            <span>Is my financial transaction data safe and private?</span>
-            <span class="faq-chevron">▼</span>
-          </div>
-          <div class="faq-answer">
-            100% safe. MyUPIAlert is open-source under the MIT license and contains zero external HTTP client libraries, zero analytics SDKs, and zero cloud backends. All data stays strictly in local SQLite storage on your phone.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <div class="faq-question">
-            <span>Are there any hidden costs, in-app purchases, or expiry dates?</span>
-            <span class="faq-chevron">▼</span>
-          </div>
-          <div class="faq-answer">
-            None. It is completely free and open-source forever. You can freely install it across 1 counter or 100 counters without paying a single rupee.
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-inner">
-        <div>
-          <div class="brand" style="margin-bottom: 6px;">
-            <div class="brand-icon" style="width: 32px; height: 32px;">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-              </svg>
-            </div>
-            <span>MyUPIAlert</span>
-          </div>
-          <div class="footer-copy">
-            Free, Open Source Voice Soundbox & Analytics for Indian Merchants.<br>
-            Released under the MIT License.
-          </div>
-        </div>
-
-        <div class="footer-links">
-          <a href="#simulator">Simulator</a>
-          <a href="#comparison">Comparison</a>
-          <a href="#calculator">Savings Calculator</a>
-          <a href="https://github.com/codingwitharul/MyUPIAlert" target="_blank">GitHub</a>
-          <a href="https://github.com/codingwitharul/MyUPIAlert/releases">Releases</a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
+  <!-- Scripts -->
+  <!-- Vanilla Tilt for Glass 3D Hover -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+  <!-- Three.js for 3D Background -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
