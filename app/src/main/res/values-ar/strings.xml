@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyUPIAlert</string>
+    <string name="all_upi_payments">جميع مدفوعات UPI</string>
+    <string name="grant_permissions">منح الأذونات المطلوبة</string>
+    <string name="permissions_granted">الأذونات: تم منح جميع الأذونات المطلوبة وتم تعطيل تحسين البطارية لهذا التطبيق.</string>
+    <string name="test_sound">اختبار الصوت</string>
+    <string name="test_sound_amount">اختبار الصوت مع المبلغ</string>
+    <string name="announcement_volume">حجم الإعلان</string>
+
+    <string name="settings">الإعدادات</string>
+    <string name="language">اللغة (TTS)</string>
+    <string name="mute_announcements">كتم الإعلانات</string>
+    <string name="mute_subtitle">يكتم جميع تنبيهات تحويل النص إلى كلام على الفور</string>
+    <string name="volume">حجم الصوت</string>
+    <string name="speech_speed">سرعة التحدث</string>
+    <string name="announce_sender">إعلان اسم المرسل</string>
+    <string name="announce_sender_subtitle">يقرأ: تم استلام 50 روبية من أرفيند</string>
+    <string name="upi_apps">تطبيقات UPI</string>
+    <string name="sms_forwarder">محول رسائل SMS</string>
+    <string name="forward_to_number">تحويل إلى رقم</string>
+    <string name="set">تعيين</string>
+    <string name="forward_payment_type">نوع الدفع المحول</string>
+    <string name="forward_app">تطبيق التحويل</string>
+    <string name="test_sounds">اختبار الأصوات</string>
+    <string name="test_default_sound">اختبار الصوت الافتراضي</string>
+    <string name="amount">المبلغ</string>
+    <string name="test_amount">اختبار المبلغ</string>
+    <string name="app_info">معلومات التطبيق</string>
+    <string name="app_version">إصدار التطبيق</string>
+    <string name="app_language">لغة التطبيق</string>
+    <string name="app_language_change">تغيير</string>
+
+    <string name="activation_required">التفعيل مطلوب</string>
+    <string name="activation_subtitle">أدخل رمز الوصول المكون من 8 أحرف لفتح القفل</string>
+    <string name="access_code">رمز الوصول</string>
+    <string name="activate">تفعيل</string>
+    <string name="activated_successfully">تم التفعيل بنجاح!</string>
+    <string name="need_key">بحاجة إلى مفتاح؟ اتصل بنا</string>
+    <string name="verifying">جاري التحقق من الرمز…</string>
+
+    <string name="permissions_missing">بعض الأذونات مفقودة. يرجى منحها ليعمل التطبيق بشكل موثوق.</string>
+
+    <string name="select_app_language">اختر لغة التطبيق</string>
+    <string name="language_english">English</string>
+    <string name="language_hindi">हिंदी (Hindi)</string>
+    <string name="cancel">إلغاء</string>
+    <string name="toast_monitor_apps">نحن نراقب جميع هذه التطبيقات تلقائياً.</string>
+    <string name="toast_forwarding_disabled">تم تعطيل إعادة التوجيه</string>
+    <string name="toast_grant_sms_permission">يرجى منح إذن إرسال الرسائل أولاً</string>
+    <string name="toast_number_configured">✅ تم تكوين الرقم وإرسال رسالة اختبار!</string>
+    <string name="toast_failed_send_sms">فشل في إرسال الرسالة: %s</string>
+    <string name="toast_enable_notification_access">يرجى تمكين وصول الإشعارات لتنبيه الدفع UPI</string>
+    <string name="toast_auto_start_not_found">لم يتم العثور على شاشة البدء التلقائي.</string>
+    <string name="toast_no_transactions">لا توجد معاملات للتصدير</string>
+    <string name="toast_storage_permission">مطلوب إذن التخزين للتصدير.</string>
+    <string name="toast_statement_exported">✅ تم تصدير الكشف إلى التنزيلات!</string>
+    <string name="toast_export_failed">فشل في تصدير الكشف: %s</string>
+    <string name="toast_muted">تم كتم الإعلانات \uD83D\uDD15</string>
+    <string name="toast_unmuted">تم إلغاء كتم الإعلانات \uD83D\uDD0A</string>
+</resources>
