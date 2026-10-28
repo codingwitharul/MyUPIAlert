@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.codingwitharul.myupialert.AutoStartHelper
+import com.codingwitharul.myupialert.ForegroundTtsService
 import com.codingwitharul.myupialert.R
 import com.codingwitharul.myupialert.ui.MainEffect
 import com.codingwitharul.myupialert.ui.MainIntent
@@ -356,6 +357,29 @@ fun SettingsScreen(
                         modifier = Modifier.padding(top = 2.dp, start = 2.dp)
                     )
 
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    OutlinedButton(
+                        onClick = { onIntent(MainIntent.ResetOnboarding) },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Primary),
+                        border = BorderStroke(1.dp, Primary.copy(alpha = 0.5f))
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Tune,
+                            contentDescription = null,
+                            tint = Primary,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = "Re-Run Initial Device Setup Wizard",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+
                     Spacer(modifier = Modifier.height(14.dp))
 
                     // Pre-Announcement Chime Toggle
@@ -449,6 +473,42 @@ fun SettingsScreen(
                             colors = SwitchDefaults.colors(
                                 checkedThumbColor = Color.White,
                                 checkedTrackColor = Primary,
+                                uncheckedThumbColor = TextMuted,
+                                uncheckedTrackColor = SurfaceLight
+                            )
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Sticky Status Bar Toggle
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = "Sticky Status Bar & Live HUD",
+                                fontWeight = FontWeight.SemiBold,
+                                color = TextPrimary,
+                                fontSize = 14.sp
+                            )
+                            Text(
+                                text = "Shows live soundbox status, today's collection total, last payment ticker, and quick controls pinned in the app and Android status bar",
+                                fontSize = 12.sp,
+                                color = TextSecondary
+                            )
+                        }
+                        Switch(
+                            checked = state.isStickyStatusBarEnabled,
+                            onCheckedChange = {
+                                onIntent(MainIntent.ToggleStickyStatusBar(it))
+                                ForegroundTtsService.updateNotification(context)
+                            },
+                            colors = SwitchDefaults.colors(
+                                checkedThumbColor = Color.White,
+                                checkedTrackColor = Success,
                                 uncheckedThumbColor = TextMuted,
                                 uncheckedTrackColor = SurfaceLight
                             )

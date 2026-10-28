@@ -51,6 +51,10 @@ class SettingsRepository(private val prefs: SharedPreferences) {
         get() = prefs.getString("store_name", "") ?: ""
         set(value) = prefs.edit().putString("store_name", value).apply()
 
+    var isOnboardingCompleted: Boolean
+        get() = prefs.getBoolean("is_onboarding_completed", false)
+        set(value) = prefs.edit().putBoolean("is_onboarding_completed", value).apply()
+
     var strobeFlashlightOnPayment: Boolean
         get() = prefs.getBoolean("strobe_flashlight_on_payment", false)
         set(value) = prefs.edit().putBoolean("strobe_flashlight_on_payment", value).apply()
@@ -94,6 +98,10 @@ class SettingsRepository(private val prefs: SharedPreferences) {
     var scheduleEndMinute: Int
         get() = prefs.getInt("schedule_end_minute", 0)
         set(value) = prefs.edit().putInt("schedule_end_minute", value).apply()
+
+    var isStickyStatusBarEnabled: Boolean
+        get() = prefs.getBoolean("is_sticky_status_bar_enabled", true)
+        set(value) = prefs.edit().putBoolean("is_sticky_status_bar_enabled", value).apply()
 
     fun isServiceActiveNow(): Boolean {
         if (!isServiceEnabled) return false

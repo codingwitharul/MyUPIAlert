@@ -12,6 +12,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
+import android.app.PendingIntent
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.audiofx.LoudnessEnhancer
@@ -22,14 +23,24 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.codingwitharul.myupialert.db.TransactionDao
+import com.codingwitharul.myupialert.model.PaymentTransaction
+import com.codingwitharul.myupialert.repository.SettingsRepository
+import com.codingwitharul.myupialert.smsparser.AnnouncementPhrases
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
+import java.text.NumberFormat
+import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 
-import com.codingwitharul.myupialert.repository.SettingsRepository
-import org.koin.android.ext.android.inject
-
 class ForegroundTtsService : Service() {
     private val settingsRepository: SettingsRepository by inject()
+    private val transactionDao: TransactionDao by inject()
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     private var tts: TextToSpeech? = null
 
@@ -45,12 +56,13 @@ class ForegroundTtsService : Service() {
         super.onCreate()
         createNotificationChannel()
         val n = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("UPI Payment Alert Active")
+            .setContentTitle("MyUPIAlert Soundbox Active")
             .setContentText("Listening for incoming payments via SMS and Notifications.")
             .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
             .setOngoing(true)
             .build()
-        startForeground(12345, n)
+        startForeground(NOTIFICATION_ID, n)
+        updateStickyNotification()
 
         // Generate audio session ID for hardware LoudnessEnhancer
         try {
@@ -225,11 +237,24 @@ class ForegroundTtsService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (intent != null && ACTION_SPEAK == intent.action) {
-            val text = intent.getStringExtra(EXTRA_TEXT)
-            val isForceSpeak = intent.getBooleanExtra(EXTRA_FORCE_SPEAK, false)
-            if (!text.isNullOrEmpty()) {
-                handleSpeakRequest(text, isForceSpeak)
+        if (intent != null) {
+            when (intent.action) {
+                ACTION_SPEAK -> {
+                    val text = intent.getStringExtra(EXTRA_TEXT)
+                    val isForceSpeak = intent.getBooleanExtra(EXTRA_FORCE_SPEAK, false)
+                    if (!text.isNullOrEmpty()) {
+                        handleSpeakRequest(text, isForceSpeak)
+                    }
+                }
+                ACTION_UPDATE_NOTIFICATION -> {
+                    updateStickyNotification()
+                }
+                ACTION_REPEAT_LAST -> {
+                    handleRepeatLast()
+                }
+                ACTION_TOGGLE_MUTE -> {
+                    handleToggleMute()
+                }
             }
         }
         return START_STICKY
@@ -286,6 +311,7 @@ class ForegroundTtsService : Service() {
 
         // Announce
         speak(speechText)
+        updateStickyNotification()
     }
 
     private fun speak(text: String) {
@@ -386,12 +412,225 @@ class ForegroundTtsService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
+    private fun handleRepeatLast() {
+        serviceScope.launch {
+            val latest = transactionDao.getLatestTransactionSync()
+            if (latest != null && latest.type.equals("credit", ignoreCase = true)) {
+                val amountStr = latest.amount ?: "0"
+                val parts = amountStr.split("\\.".toRegex(), limit = 2)
+                val rupees = parts[0]
+                val paisa = if (parts.size > 1 && parts[1] != "0" && parts[1] != "00") parts[1] else null
+                val lang = settingsRepository.language
+                val senderName = extractCleanSender(latest.sender)
+                val announceSender = settingsRepository.announceSenderName && senderName.isNotBlank()
+
+                val phrase = AnnouncementPhrases.buildPhrase(
+                    languageStr = lang,
+                    amount = "|$rupees|",
+                    paisa = paisa?.let { "|$it|" },
+                    senderName = if (announceSender) senderName else null
+                )
+                handleSpeakRequest(phrase, isForceSpeak = true)
+            } else {
+                handleSpeakRequest("No recent payment found to repeat", isForceSpeak = true)
+            }
+        }
+    }
+
+    private fun handleToggleMute() {
+        val newMuted = !settingsRepository.isMuted
+        settingsRepository.isMuted = newMuted
+        val feedback = if (newMuted) "Soundbox announcements muted" else "Soundbox announcements unmuted"
+        handleSpeakRequest(feedback, isForceSpeak = true)
+        updateStickyNotification()
+    }
+
+    fun updateStickyNotification() {
+        serviceScope.launch {
+            try {
+                val nm = getSystemService(Context.NOTIFICATION_SERVICE) as? NotificationManager ?: return@launch
+                val notification = buildServiceNotification()
+                nm.notify(NOTIFICATION_ID, notification)
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to update sticky notification: ${e.message}")
+            }
+        }
+    }
+
+    private suspend fun buildServiceNotification(): android.app.Notification {
+        val openAppIntent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        val openAppPendingIntent = PendingIntent.getActivity(
+            this, 0, openAppIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        if (!settingsRepository.isStickyStatusBarEnabled) {
+            return NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("MyUPIAlert Soundbox Active")
+                .setContentText("Listening for incoming UPI payments.")
+                .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+                .setContentIntent(openAppPendingIntent)
+                .setOngoing(true)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .build()
+        }
+
+        // Calculate Today's Stats
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+        val startOfDay = cal.timeInMillis
+
+        cal.set(Calendar.HOUR_OF_DAY, 23)
+        cal.set(Calendar.MINUTE, 59)
+        cal.set(Calendar.SECOND, 59)
+        cal.set(Calendar.MILLISECOND, 999)
+        val endOfDay = cal.timeInMillis
+
+        val todayTxns = try {
+            transactionDao.getTransactionsByDateSync(startOfDay, endOfDay)
+        } catch (e: Exception) {
+            emptyList()
+        }
+        val latestTxn = try {
+            transactionDao.getLatestTransactionSync()
+        } catch (e: Exception) {
+            null
+        }
+
+        var todayTotal = 0.0
+        var todayCredits = 0
+        for (t in todayTxns) {
+            if (t.type.equals("credit", ignoreCase = true)) {
+                todayCredits++
+                val amt = t.amount?.replace(",", "")?.toDoubleOrNull() ?: 0.0
+                todayTotal += amt
+            }
+        }
+
+        val totalStr = formatIndianCurrency(todayTotal)
+        val isLive = settingsRepository.isServiceActiveNow()
+        val isMuted = settingsRepository.isMuted
+        val storeName = settingsRepository.storeName.trim()
+
+        val statusTag = when {
+            !isLive -> "⏸️ PAUSED"
+            isMuted -> "🔇 MUTED"
+            else -> "🟢 LIVE"
+        }
+
+        val title = if (storeName.isNotBlank()) {
+            "$storeName • $statusTag"
+        } else {
+            "MyUPIAlert Soundbox • $statusTag"
+        }
+
+        val lastSender = extractCleanSender(latestTxn?.sender)
+        val lastAmt = latestTxn?.amount ?: "0"
+
+        val shortInfo = if (latestTxn != null) {
+            "Today: ₹$totalStr ($todayCredits txns) • Last: +₹$lastAmt ($lastSender)"
+        } else {
+            "Today: ₹$totalStr ($todayCredits txns) • Ready for payments"
+        }
+
+        val bigText = StringBuilder()
+        bigText.append("Today's Total: ₹$totalStr from $todayCredits payments\n")
+        if (latestTxn != null) {
+            bigText.append("Latest Payment: +₹$lastAmt via $lastSender\n")
+        }
+        bigText.append("Voice: ${settingsRepository.language} | Soundbox: ${if (isMuted) "Muted" else if (isLive) "Active" else "Scheduled Off"}")
+
+        // Repeat Last Action
+        val repeatIntent = Intent(this, ForegroundTtsService::class.java).apply {
+            action = ACTION_REPEAT_LAST
+        }
+        val repeatPending = PendingIntent.getService(
+            this, 1, repeatIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        // Mute / Unmute Action
+        val muteIntent = Intent(this, ForegroundTtsService::class.java).apply {
+            action = ACTION_TOGGLE_MUTE
+        }
+        val mutePending = PendingIntent.getService(
+            this, 2, muteIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        return NotificationCompat.Builder(this, CHANNEL_ID)
+            .setContentTitle(title)
+            .setContentText(shortInfo)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(bigText.toString()))
+            .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
+            .setContentIntent(openAppPendingIntent)
+            .setOngoing(true)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .addAction(android.R.drawable.ic_menu_revert, "Repeat Last", repeatPending)
+            .addAction(
+                if (isMuted) android.R.drawable.ic_lock_silent_mode_off else android.R.drawable.ic_lock_silent_mode,
+                if (isMuted) "Unmute" else "Mute",
+                mutePending
+            )
+            .build()
+    }
+
+    private fun extractCleanSender(sender: String?): String {
+        if (sender.isNullOrBlank()) return "UPI"
+        val lower = sender.lowercase(Locale.ROOT)
+        return when {
+            lower.contains("phonepe") -> "PhonePe"
+            lower.contains("paytm") -> "Paytm"
+            lower.contains("paisa") || lower.contains("gpay") || lower.contains("google pay") -> "Google Pay"
+            lower.contains("bhim") -> "BHIM"
+            lower.contains("cred") -> "CRED"
+            lower.contains("bharatpe") -> "BharatPe"
+            lower.contains("fampay") -> "FamPay"
+            lower.contains("hdfc") -> "HDFC"
+            lower.contains("sbi") -> "SBI"
+            lower.contains("icici") -> "ICICI"
+            else -> sender.substringAfterLast('.').take(12)
+        }
+    }
+
+    private fun formatIndianCurrency(amount: Double): String {
+        val whole = amount.toLong()
+        val numStr = whole.toString()
+        if (numStr.length <= 3) return numStr
+        val lastThree = numStr.takeLast(3)
+        val rest = numStr.dropLast(3)
+        val formattedRest = rest.reversed().chunked(2).joinToString(",").reversed()
+        return "$formattedRest,$lastThree"
+    }
+
     companion object {
+        const val NOTIFICATION_ID = 12345
         const val ACTION_SPEAK = "com.codingwitharul.myupialert.action.SPEAK"
+        const val ACTION_UPDATE_NOTIFICATION = "com.codingwitharul.myupialert.action.UPDATE_NOTIFICATION"
+        const val ACTION_REPEAT_LAST = "com.codingwitharul.myupialert.action.REPEAT_LAST"
+        const val ACTION_TOGGLE_MUTE = "com.codingwitharul.myupialert.action.TOGGLE_MUTE"
         const val EXTRA_TEXT = "extra_text"
         const val EXTRA_FORCE_SPEAK = "extra_force_speak"
         private const val CHANNEL_ID = "upi_tts_channel"
         private const val TAG = "UPIPaymentAlert"
         private const val DEDUPLICATION_WINDOW_MS = 60000L // 60 seconds
+
+        fun updateNotification(context: Context) {
+            val intent = Intent(context, ForegroundTtsService::class.java).apply {
+                action = ACTION_UPDATE_NOTIFICATION
+            }
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(intent)
+                } else {
+                    context.startService(intent)
+                }
+            } catch (ignored: Exception) {}
+        }
     }
 }

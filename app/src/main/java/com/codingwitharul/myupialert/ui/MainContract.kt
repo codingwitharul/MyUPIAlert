@@ -42,12 +42,14 @@ data class MainState(
     
     // Merchant & Audio Enhancements
     val storeName: String = "",
+    val isOnboardingCompleted: Boolean = false,
     val playChimeBeforeVoice: Boolean = true,
     val strobeFlashlightOnPayment: Boolean = false,
     val detectDuplicateTransactions: Boolean = true,
     val soundboxKeepScreenOn: Boolean = true,
     val bluetoothKeepAlive: Boolean = false,
     val isDarkMode: Boolean = true,
+    val isStickyStatusBarEnabled: Boolean = true,
     
     // Service Override & Schedule Active Hours
     val isServiceEnabled: Boolean = true,
@@ -101,6 +103,7 @@ sealed interface MainIntent {
     data class ToggleDetectDuplicates(val enabled: Boolean) : MainIntent
     data class ToggleSoundboxKeepScreenOn(val enabled: Boolean) : MainIntent
     data class ToggleBluetoothKeepAlive(val enabled: Boolean) : MainIntent
+    data class ToggleStickyStatusBar(val enabled: Boolean) : MainIntent
     
     // Forwarder updates
     data class ChangeForwarderNumber(val number: String) : MainIntent
@@ -121,6 +124,16 @@ sealed interface MainIntent {
     object SpeakTodaySummary : MainIntent
     object RepeatLastPayment : MainIntent
     data class TestSound(val amount: String?) : MainIntent
+    
+    // Onboarding & Setup Wizard
+    data class CompleteOnboarding(
+        val storeName: String,
+        val language: String,
+        val announceSender: Boolean,
+        val playChime: Boolean,
+        val maxVolumeBoost: Boolean
+    ) : MainIntent
+    object ResetOnboarding : MainIntent
 }
 
 sealed interface MainEffect {

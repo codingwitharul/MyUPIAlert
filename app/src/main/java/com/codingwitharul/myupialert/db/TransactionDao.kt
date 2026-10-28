@@ -36,4 +36,12 @@ interface TransactionDao {
 
     @Query("DELETE FROM transactions")
     suspend fun deleteAll()
+
+    /** Synchronous query for widget — returns today's transactions directly (not Flow) */
+    @Query("SELECT * FROM transactions WHERE timestamp >= :startTimestamp AND timestamp <= :endTimestamp ORDER BY timestamp DESC")
+    suspend fun getTransactionsByDateSync(startTimestamp: Long, endTimestamp: Long): List<PaymentTransaction>
+
+    /** Synchronous query for sticky status bar — returns latest transaction directly */
+    @Query("SELECT * FROM transactions ORDER BY timestamp DESC LIMIT 1")
+    suspend fun getLatestTransactionSync(): PaymentTransaction?
 }

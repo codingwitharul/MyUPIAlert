@@ -3,6 +3,7 @@ package com.codingwitharul.myupialert.di
 import android.content.Context
 import com.codingwitharul.myupialert.db.AppDatabase
 import com.codingwitharul.myupialert.dedup.PaymentDeduplicator
+import com.codingwitharul.myupialert.fraud.FraudDetector
 import com.codingwitharul.myupialert.repository.SettingsRepository
 import com.codingwitharul.myupialert.repository.TransactionRepository
 import com.codingwitharul.myupialert.smsparser.SmsParser
@@ -28,6 +29,10 @@ val appModule = module {
     singleOf(::SmsParser)
     singleOf(::PaymentDeduplicator)
     
+    // Smart Fraud Detection Engine
+    singleOf(::FraudDetector)
+    
     // ViewModel
     viewModelOf(::MainViewModel)
 }
+

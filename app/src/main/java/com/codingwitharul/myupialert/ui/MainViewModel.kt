@@ -34,6 +34,7 @@ class MainViewModel(
         forwarderTypeFilter = settingsRepository.forwarderTypeFilter,
         hasPromptedAutostart = settingsRepository.hasPromptedAutostart,
         storeName = settingsRepository.storeName,
+        isOnboardingCompleted = settingsRepository.isOnboardingCompleted,
         playChimeBeforeVoice = settingsRepository.playChimeBeforeVoice,
         strobeFlashlightOnPayment = settingsRepository.strobeFlashlightOnPayment,
         detectDuplicateTransactions = settingsRepository.detectDuplicateTransactions,
@@ -42,6 +43,7 @@ class MainViewModel(
         isDarkMode = settingsRepository.isDarkMode,
         isServiceEnabled = settingsRepository.isServiceEnabled,
         isScheduleEnabled = settingsRepository.isScheduleEnabled,
+        isStickyStatusBarEnabled = settingsRepository.isStickyStatusBarEnabled,
         scheduleStartHour = settingsRepository.scheduleStartHour,
         scheduleStartMinute = settingsRepository.scheduleStartMinute,
         scheduleEndHour = settingsRepository.scheduleEndHour,
@@ -180,6 +182,10 @@ class MainViewModel(
                 settingsRepository.bluetoothKeepAlive = intent.enabled
                 _state.update { it.copy(bluetoothKeepAlive = intent.enabled) }
             }
+            is MainIntent.ToggleStickyStatusBar -> {
+                settingsRepository.isStickyStatusBarEnabled = intent.enabled
+                _state.update { it.copy(isStickyStatusBarEnabled = intent.enabled) }
+            }
             MainIntent.ExportTransactions -> {
                 sendEffect(MainEffect.ExportHtml(_state.value.transactions))
             }
@@ -236,6 +242,41 @@ class MainViewModel(
                 } else {
                     sendEffect(MainEffect.ShowToast("No recent payment found to repeat"))
                 }
+            }
+            is MainIntent.CompleteOnboarding -> {
+                settingsRepository.storeName = intent.storeName.trim()
+                settingsRepository.language = intent.language
+                settingsRepository.announceSenderName = intent.announceSender
+                settingsRepository.playChimeBeforeVoice = intent.playChime
+                if (intent.maxVolumeBoost) {
+                    settingsRepository.volume = 100
+                }
+                settingsRepository.isOnboardingCompleted = true
+
+                _state.update {
+                    it.copy(
+                        storeName = intent.storeName.trim(),
+                        language = intent.language,
+                        announceSenderName = intent.announceSender,
+                        playChimeBeforeVoice = intent.playChime,
+                        volume = if (intent.maxVolumeBoost) 100 else it.volume,
+                        isOnboardingCompleted = true
+                    )
+                }
+
+                // Welcome voice announcement
+                val merchantName = intent.storeName.trim()
+                val welcomePhrase = if (merchantName.isNotBlank()) {
+                    "Welcome to MyUPIAlert! Voice soundbox is ready for $merchantName."
+                } else {
+                    "Welcome to MyUPIAlert! Voice soundbox is ready to announce your payments."
+                }
+                sendEffect(MainEffect.Speak(welcomePhrase, isForce = true))
+                sendEffect(MainEffect.ShowToast("Device setup complete! Soundbox is active."))
+            }
+            MainIntent.ResetOnboarding -> {
+                settingsRepository.isOnboardingCompleted = false
+                _state.update { it.copy(isOnboardingCompleted = false) }
             }
         }
     }

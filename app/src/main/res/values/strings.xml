@@ -61,4 +61,19 @@
     <string name="toast_export_failed">Failed to export statement: %s</string>
     <string name="toast_muted">Announcements Muted \uD83D\uDD15</string>
     <string name="toast_unmuted">Announcements Unmuted \uD83D\uDD0A</string>
+
+    <!-- Widget -->
+    <string name="widget_description">Shows today\'s peak payment hours and total collection on your home screen.</string>
+
+    <!-- Quick Share Receipt -->
+    <string name="toast_receipt_shared">Receipt image ready to share!</string>
+    <string name="toast_receipt_failed">Could not generate receipt</string>
+    <string name="share_receipt">Share Receipt</string>
+
+    <!-- Smart Fraud Alert -->
+    <string name="fraud_alert_title">⚠️ Fraud Alert</string>
+    <string name="fraud_alert_rapid_replay">Suspicious: Same amount received multiple times rapidly</string>
+    <string name="fraud_alert_burst_flood">Suspicious: Too many payments in a very short time</string>
+    <string name="fraud_alert_unusual_amount">Suspicious: Unusually large payment detected</string>
 </resources>
+

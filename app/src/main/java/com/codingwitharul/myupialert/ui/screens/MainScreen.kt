@@ -13,6 +13,7 @@ import android.os.Environment
 import android.os.PowerManager
 import android.provider.MediaStore
 import android.provider.Settings
+import androidx.core.app.NotificationManagerCompat
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -22,6 +23,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.Spring
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -58,6 +60,7 @@ import com.codingwitharul.myupialert.AutoStartHelper
 import com.codingwitharul.myupialert.ForegroundTtsService
 import com.codingwitharul.myupialert.R
 import com.codingwitharul.myupialert.model.PaymentTransaction
+import com.codingwitharul.myupialert.receipt.ReceiptGenerator
 import com.codingwitharul.myupialert.ui.MainEffect
 import com.codingwitharul.myupialert.ui.MainIntent
 import com.codingwitharul.myupialert.ui.MainState
@@ -72,7 +75,7 @@ import java.util.Date
 import java.util.Locale
 import java.util.regex.Pattern
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
     val state by viewModel.state.collectAsState()
@@ -108,8 +111,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
             ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
         }
 
-        val enabledListeners = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
-        val notifGranted = enabledListeners != null && enabledListeners.contains(context.packageName)
+        val notifGranted = NotificationManagerCompat.getEnabledListenerPackages(context).contains(context.packageName)
 
         val pm = context.getSystemService(Context.POWER_SERVICE) as? PowerManager
         val batteryIgnored = pm != null && pm.isIgnoringBatteryOptimizations(context.packageName)
@@ -123,7 +125,7 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
         )
 
         val coreGranted = smsGranted && notifGranted
-        if (!coreGranted && !state.smsPermissionGranted) {
+        if (state.isOnboardingCompleted && !coreGranted && !state.smsPermissionGranted) {
             showPermissionDialog = true
         }
     }
@@ -323,8 +325,20 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
     MyUPIAlertTheme(darkTheme = state.isDarkMode) {
         val palette = MaterialTheme.appPalette
 
-        when (currentScreen) {
-            "soundbox" -> {
+        when {
+            !state.isOnboardingCompleted || currentScreen == "setup" -> {
+                if (currentScreen == "setup") {
+                    BackHandler { currentScreen = "dashboard" }
+                }
+                LandingSetupScreen(
+                    state = state,
+                    onIntent = { viewModel.handleIntent(it) },
+                    onFinishSetup = {
+                        currentScreen = "dashboard"
+                    }
+                )
+            }
+            currentScreen == "soundbox" -> {
                 BackHandler { currentScreen = "dashboard" }
                 SoundboxScreen(
                     state = state,
@@ -439,7 +453,22 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
 
                                         // Note: HourlySalesAnalyticsCard is MOVED OUT OF HOME into the dedicated Analytics tab!
 
-                                        // 5. Recent Transactions Section Header
+                                        // 5. Sticky Status Bar HUD (Pins to top when scrolling)
+                                        if (state.isStickyStatusBarEnabled) {
+                                            stickyHeader(key = "dashboard_sticky_bar") {
+                                                DashboardStickyStatusBar(
+                                                    state = state,
+                                                    onRepeatLast = { viewModel.handleIntent(MainIntent.RepeatLastPayment) },
+                                                    onToggleMute = {
+                                                        viewModel.handleIntent(MainIntent.ToggleMute(!state.isMuted))
+                                                        ForegroundTtsService.updateNotification(context)
+                                                    },
+                                                    onOpenSoundbox = { currentScreen = "soundbox" }
+                                                )
+                                            }
+                                        }
+
+                                        // 6. Recent Transactions Section Header
                                         item(key = "recent_header") {
                                             Row(
                                                 modifier = Modifier
@@ -501,8 +530,8 @@ fun MainScreen(viewModel: MainViewModel = koinViewModel()) {
                         }
                     }
 
-                    // Always show Permission Dialog on App Open if permissions are not granted
-                    if (showPermissionDialog && !state.allPermissionsGranted) {
+                    // Always show Permission Dialog on App Open if permissions are not granted and onboarding is complete
+                    if (state.isOnboardingCompleted && showPermissionDialog && !state.allPermissionsGranted) {
                         AlwaysShowPermissionDialog(
                             state = state,
                             onDismiss = { showPermissionDialog = false },
@@ -631,7 +660,7 @@ fun GlassTopAppBar(
                     modifier = Modifier.background(palette.surface)
                 ) {
                     DropdownMenuItem(
-                        text = { Text("🔊 Counter Soundbox", color = palette.textPrimary, fontSize = 13.sp) },
+                        text = { Text("Counter Soundbox", color = palette.textPrimary, fontSize = 13.sp) },
                         leadingIcon = { Icon(Icons.Default.Storefront, null, tint = Primary, modifier = Modifier.size(18.dp)) },
                         onClick = {
                             showMoreMenu = false
@@ -639,7 +668,7 @@ fun GlassTopAppBar(
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("📢 Speak Today's Summary", color = palette.textPrimary, fontSize = 13.sp) },
+                        text = { Text("Speak Today's Summary", color = palette.textPrimary, fontSize = 13.sp) },
                         leadingIcon = { Icon(Icons.AutoMirrored.Filled.VolumeUp, null, tint = AccentCyan, modifier = Modifier.size(18.dp)) },
                         onClick = {
                             showMoreMenu = false
@@ -647,7 +676,7 @@ fun GlassTopAppBar(
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("🔁 Repeat Last Payment", color = palette.textPrimary, fontSize = 13.sp) },
+                        text = { Text("Repeat Last Payment", color = palette.textPrimary, fontSize = 13.sp) },
                         leadingIcon = { Icon(Icons.Default.Replay, null, tint = Success, modifier = Modifier.size(18.dp)) },
                         onClick = {
                             showMoreMenu = false
@@ -655,7 +684,7 @@ fun GlassTopAppBar(
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("📥 Export Statement", color = palette.textPrimary, fontSize = 13.sp) },
+                        text = { Text("Export Statement", color = palette.textPrimary, fontSize = 13.sp) },
                         leadingIcon = { Icon(Icons.Default.FileDownload, null, tint = Warning, modifier = Modifier.size(18.dp)) },
                         onClick = {
                             showMoreMenu = false
@@ -664,7 +693,7 @@ fun GlassTopAppBar(
                     )
                     HorizontalDivider(color = palette.glassBorder)
                     DropdownMenuItem(
-                        text = { Text("🛡️ Permission Diagnostics", color = palette.textPrimary, fontSize = 13.sp) },
+                        text = { Text("Permission Diagnostics", color = palette.textPrimary, fontSize = 13.sp) },
                         leadingIcon = { Icon(Icons.Default.Shield, null, tint = AccentViolet, modifier = Modifier.size(18.dp)) },
                         onClick = {
                             showMoreMenu = false
@@ -672,7 +701,7 @@ fun GlassTopAppBar(
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text("⚙️ Settings", color = palette.textPrimary, fontSize = 13.sp) },
+                        text = { Text("Settings", color = palette.textPrimary, fontSize = 13.sp) },
                         leadingIcon = { Icon(Icons.Default.Settings, null, tint = palette.textSecondary, modifier = Modifier.size(18.dp)) },
                         onClick = {
                             showMoreMenu = false
@@ -1876,6 +1905,69 @@ fun CollapsibleTransactionCard(transaction: PaymentTransaction) {
                             fontSize = 12.sp,
                             color = palette.textPrimary,
                             lineHeight = 17.sp
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // Actions: Quick Share Receipt & Copy
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Button(
+                        onClick = {
+                            val shareIntent = ReceiptGenerator.generateAndShare(context, transaction)
+                            if (shareIntent != null) {
+                                context.startActivity(Intent.createChooser(shareIntent, "Share Receipt"))
+                            } else {
+                                Toast.makeText(context, "Could not generate receipt", Toast.LENGTH_SHORT).show()
+                            }
+                        },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Primary),
+                        contentPadding = PaddingValues(vertical = 8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Share,
+                            contentDescription = "Share Receipt",
+                            modifier = Modifier.size(15.dp),
+                            tint = Color.White
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "Share Receipt",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
+                        )
+                    }
+
+                    OutlinedButton(
+                        onClick = {
+                            val body = transaction.body ?: ""
+                            copyToClipboard(context, "UPI Message", body)
+                            Toast.makeText(context, "Message copied to clipboard", Toast.LENGTH_SHORT).show()
+                        },
+                        modifier = Modifier.weight(1f),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = palette.textSecondary),
+                        border = BorderStroke(1.dp, palette.glassBorder),
+                        contentPadding = PaddingValues(vertical = 8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ContentCopy,
+                            contentDescription = "Copy Message",
+                            modifier = Modifier.size(15.dp),
+                            tint = palette.textSecondary
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(
+                            text = "Copy Text",
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
                 }

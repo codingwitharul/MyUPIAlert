@@ -11,7 +11,10 @@ import android.telephony.SmsManager
 import android.util.Log
 import com.codingwitharul.myupialert.dedup.DedupAction
 import com.codingwitharul.myupialert.dedup.PaymentDeduplicator
+import com.codingwitharul.myupialert.fraud.FraudDetector
+import com.codingwitharul.myupialert.fraud.FraudType
 import com.codingwitharul.myupialert.model.PaymentTransaction
+import com.codingwitharul.myupialert.widget.HeatmapWidgetProvider
 import com.codingwitharul.myupialert.repository.TransactionRepository
 import com.codingwitharul.myupialert.smsparser.SmsParser
 import kotlinx.coroutines.CoroutineScope
@@ -25,6 +28,7 @@ class NotificationListener : NotificationListenerService() {
     private val transactionRepository: TransactionRepository by inject()
     private val smsParser: SmsParser by inject()
     private val paymentDeduplicator: PaymentDeduplicator by inject()
+    private val fraudDetector: FraudDetector by inject()
 
     private val executor = Executors.newSingleThreadExecutor()
 
@@ -140,6 +144,12 @@ class NotificationListener : NotificationListenerService() {
                     `package` = appContext.packageName
                 }
                 appContext.sendBroadcast(intent)
+
+                // Refresh home screen widget with new data
+                HeatmapWidgetProvider.refreshAll(appContext)
+
+                // Refresh sticky status bar notification
+                ForegroundTtsService.updateNotification(appContext)
             } catch (ignored: Exception) {}
         }
 
@@ -151,10 +161,19 @@ class NotificationListener : NotificationListenerService() {
 
         // Speak via the foreground TTS service if credit
         if (isCredit) {
-            val lang = prefs.getString("language", "English") ?: "English"
-            val announceSender = prefs.getBoolean("announce_sender_name", true)
-            val textToRead = smsParser.getAmountFromMessageBody(appContext, messageBody, lang, announceSender, senderName)
-            speakTts(appContext, textToRead)
+            // Smart Fraud Detection — analyze before speaking
+            val fraudVerdict = fraudDetector.analyze(amountStr, senderName)
+            if (fraudVerdict.type != FraudType.CLEAN) {
+                // Speak fraud warning instead of normal announcement
+                val warningPhrase = fraudDetector.buildFraudWarningPhrase(fraudVerdict, amountStr)
+                speakTts(appContext, warningPhrase)
+                Log.w(TAG, "Fraud detected [${fraudVerdict.type}]: ${fraudVerdict.description}")
+            } else {
+                val lang = prefs.getString("language", "English") ?: "English"
+                val announceSender = prefs.getBoolean("announce_sender_name", true)
+                val textToRead = smsParser.getAmountFromMessageBody(appContext, messageBody, lang, announceSender, senderName)
+                speakTts(appContext, textToRead)
+            }
         }
     }
 
