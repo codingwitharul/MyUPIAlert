@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Install & Setup Guide | MyUPIAlert</title>
+  <meta name="description" content="Step-by-step guide to installing and setting up the MyUPIAlert Voice Soundbox on your Android device.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .install-content {
+      max-width: 800px;
+      margin: 120px auto 60px;
+      padding: 40px;
+    }
+    .install-content h1 {
+      font-size: 3rem;
+      margin-bottom: 24px;
+    }
+    .step-card {
+      margin-top: 30px;
+      padding: 30px;
+      border-radius: 20px;
+      border-left: 4px solid var(--primary);
+    }
+    .step-card h2 {
+      color: var(--primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .step-number {
+      background: rgba(99, 102, 241, 0.2);
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-size: 1.2rem;
+    }
+    .step-card p, .step-card ul {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      margin-bottom: 16px;
+    }
+    .step-card ul {
+      padding-left: 24px;
+    }
+    .step-card li {
+      margin-bottom: 8px;
+    }
+    .warning-box {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 16px;
+      border-radius: 12px;
+      margin-top: 16px;
+    }
+    .warning-box strong {
+      color: #F59E0B;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 3D Canvas Background -->
+  <canvas id="bg-canvas"></canvas>
+
+  <div class="content-wrapper">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <a href="index.html" style="text-decoration: none;">
+        <div class="brand">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="brand-icon">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <span>MyUPIAlert</span>
+        </div>
+      </a>
+      <div class="nav-links">
+        <a href="index.html#features">Features</a>
+        <a href="https://github.com/codingwitharul/MyUPIAlert/releases/latest" class="btn-primary btn-sm">Download APK</a>
+      </div>
+    </nav>
+
+    <div class="install-content glass reveal active">
+      <h1>Installation <span class="gradient-text">Guide</span></h1>
+      <p class="hero-subtitle">Get your free offline Voice Soundbox running in less than 2 minutes.</p>
+
+      <div class="step-card glass">
+        <h2><span class="step-number">1</span> Download the App</h2>
+        <p>Because MyUPIAlert intercepts system notifications and SMS to function as a soundbox, it cannot be hosted on the Google Play Store (due to their SMS permission policies). You must download the APK directly from our open-source repository.</p>
+        <a href="https://github.com/codingwitharul/MyUPIAlert/releases/latest" class="btn-primary glow" style="margin-top: 10px;">Download Latest APK</a>
+      </div>
+
+      <div class="step-card glass">
+        <h2><span class="step-number">2</span> Install the APK</h2>
+        <p>Once downloaded, tap the APK file to install it. You may see a prompt saying "Install unknown apps".</p>
+        <ul>
+          <li>Tap <strong>Settings</strong> on the prompt.</li>
+          <li>Toggle on <strong>Allow from this source</strong>.</li>
+          <li>Go back and tap <strong>Install</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="step-card glass">
+        <h2><span class="step-number">3</span> Grant Required Permissions</h2>
+        <p>When you open the app for the first time, you will see a prominent red banner asking for permissions. These are strictly required for the app to function:</p>
+        <ul>
+          <li><strong>SMS Permissions:</strong> Allows the app to read banking transactional messages.</li>
+          <li><strong>Notification Access:</strong> Allows the app to read incoming pushes from Google Pay, PhonePe, and Paytm.</li>
+        </ul>
+        <div class="warning-box">
+          <strong>Privacy Guarantee:</strong> All processing is done 100% locally on your device using SQLite. We do not have any cloud servers, and your data never leaves your phone.
+        </div>
+      </div>
+
+      <div class="step-card glass">
+        <h2><span class="step-number">4</span> Disable Battery Optimization (Crucial)</h2>
+        <p>To ensure the app always speaks aloud even when your screen is off, you must exclude it from Android's aggressive battery killers.</p>
+        <ul>
+          <li>The app will prompt you to "Ignore Battery Optimization". Tap <strong>Allow</strong>.</li>
+          <li>For Xiaomi/Oppo/Vivo users: You must also manually go to Settings > Apps > MyUPIAlert and enable <strong>Auto-Start</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="step-card glass">
+        <h2><span class="step-number">5</span> Select Language & Test</h2>
+        <p>Go to the <strong>Settings</strong> tab, select your preferred regional language (e.g., Hindi, Tamil), adjust the volume to 200%, and press <strong>Test Default Sound</strong>.</p>
+        <p>You are now ready to receive payments!</p>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon></svg>
+          <span>MyUPIAlert</span>
+        </div>
+        <p>Built with ❤️ by the Open Source Community.</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
