@@ -15,8 +15,8 @@ const LANGUAGES = [
   { code: 'ur', name: 'Urdu', native: 'اردو', template: (amt, sender) => `${sender} سے ${amt} روپے موصول ہوئے` }
 ];
 
-// 2. Initialize Simulator
 document.addEventListener('DOMContentLoaded', () => {
+  // 1. Initialize Simulator
   const langSelect = document.getElementById('sim-language');
 
   LANGUAGES.forEach(lang => {
@@ -39,18 +39,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     transcript.innerHTML = `🔊 <strong>${phrase}</strong>`;
 
-    // Play payment sound (HTML5 audio if available or synth)
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(phrase);
       utterance.lang = `${langCode}-IN`;
-      utterance.rate = 1.0;
+      utterance.rate = 0.95;
       window.speechSynthesis.speak(utterance);
     }
   });
 
-  // 3. Setup Three.js Background
+  // 2. Setup Three.js Background
   initThreeJS();
+
+  // 3. Scroll Reveal Animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "0px 0px -50px 0px"
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    observer.observe(el);
+  });
 });
 
 function initThreeJS() {
@@ -64,73 +82,84 @@ function initThreeJS() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  // Create floating particles/coins
-  const geometry = new THREE.IcosahedronGeometry(1, 0);
-  const material = new THREE.MeshPhysicalMaterial({
-    color: 0x4F46E5,
-    metalness: 0.1,
-    roughness: 0.2,
-    transmission: 0.9, // glass effect
-    thickness: 0.5,
-  });
+  // Use Torus (Rings) and Spheres for a more premium, abstract fintech look
+  const geometry1 = new THREE.TorusGeometry(1, 0.3, 16, 100);
+  const geometry2 = new THREE.SphereGeometry(1, 32, 32);
+  const geometry3 = new THREE.TorusKnotGeometry(0.8, 0.2, 100, 16);
 
-  const material2 = new THREE.MeshPhysicalMaterial({
-    color: 0x06B6D4,
-    metalness: 0.1,
-    roughness: 0.2,
-    transmission: 0.9,
-    thickness: 0.5,
-  });
-
-  const material3 = new THREE.MeshPhysicalMaterial({
-    color: 0xEC4899,
-    metalness: 0.1,
-    roughness: 0.2,
-    transmission: 0.9,
-    thickness: 0.5,
-  });
+  const materials = [
+    new THREE.MeshPhysicalMaterial({
+      color: 0x6366F1, // Indigo
+      metalness: 0.2,
+      roughness: 0.1,
+      transmission: 0.9,
+      thickness: 1.0,
+      clearcoat: 1.0
+    }),
+    new THREE.MeshPhysicalMaterial({
+      color: 0x10B981, // Emerald
+      metalness: 0.2,
+      roughness: 0.1,
+      transmission: 0.9,
+      thickness: 1.0,
+      clearcoat: 1.0
+    }),
+    new THREE.MeshPhysicalMaterial({
+      color: 0xEC4899, // Pink
+      metalness: 0.2,
+      roughness: 0.1,
+      transmission: 0.9,
+      thickness: 1.0,
+      clearcoat: 1.0
+    })
+  ];
 
   const meshes = [];
-  const mats = [material, material2, material3];
+  const geometries = [geometry1, geometry2, geometry3];
 
-  for (let i = 0; i < 30; i++) {
-    const mesh = new THREE.Mesh(geometry, mats[i % 3]);
+  for (let i = 0; i < 25; i++) {
+    const mesh = new THREE.Mesh(
+        geometries[i % 3],
+        materials[i % 3]
+    );
 
-    mesh.position.x = (Math.random() - 0.5) * 40;
-    mesh.position.y = (Math.random() - 0.5) * 40;
-    mesh.position.z = (Math.random() - 0.5) * 20 - 10;
+    mesh.position.x = (Math.random() - 0.5) * 35;
+    mesh.position.y = (Math.random() - 0.5) * 35;
+    mesh.position.z = (Math.random() - 0.5) * 15 - 10;
 
-    const scale = Math.random() * 1.5 + 0.5;
+    const scale = Math.random() * 1.2 + 0.4;
     mesh.scale.set(scale, scale, scale);
 
     mesh.rotation.x = Math.random() * Math.PI;
     mesh.rotation.y = Math.random() * Math.PI;
 
     mesh.userData = {
-      rx: (Math.random() - 0.5) * 0.02,
-      ry: (Math.random() - 0.5) * 0.02,
-      y: (Math.random() - 0.5) * 0.05
+      rx: (Math.random() - 0.5) * 0.01,
+      ry: (Math.random() - 0.5) * 0.01,
+      speedY: (Math.random() * 0.005) + 0.002
     };
 
     scene.add(mesh);
     meshes.push(mesh);
   }
 
-  // Lights
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
   scene.add(ambientLight);
 
-  const pointLight1 = new THREE.PointLight(0x06B6D4, 2, 50);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+  directionalLight.position.set(5, 10, 7);
+  scene.add(directionalLight);
+
+  const pointLight1 = new THREE.PointLight(0x6366F1, 3, 50);
   pointLight1.position.set(10, 10, 10);
   scene.add(pointLight1);
 
-  const pointLight2 = new THREE.PointLight(0xEC4899, 2, 50);
+  const pointLight2 = new THREE.PointLight(0x10B981, 2, 50);
   pointLight2.position.set(-10, -10, 10);
   scene.add(pointLight2);
 
-  camera.position.z = 15;
+  camera.position.z = 12;
 
-  // Mouse interactivity
   let mouseX = 0;
   let mouseY = 0;
   let targetX = 0;
@@ -139,8 +168,8 @@ function initThreeJS() {
   const windowHalfY = window.innerHeight / 2;
 
   document.addEventListener('mousemove', (e) => {
-    mouseX = (e.clientX - windowHalfX) * 0.001;
-    mouseY = (e.clientY - windowHalfY) * 0.001;
+    mouseX = (e.clientX - windowHalfX) * 0.0005;
+    mouseY = (e.clientY - windowHalfY) * 0.0005;
   });
 
   const clock = new THREE.Clock();
@@ -159,7 +188,7 @@ function initThreeJS() {
     meshes.forEach((mesh, index) => {
       mesh.rotation.x += mesh.userData.rx;
       mesh.rotation.y += mesh.userData.ry;
-      mesh.position.y += Math.sin(elapsedTime + index) * 0.02;
+      mesh.position.y += Math.sin(elapsedTime * mesh.userData.speedY * 50 + index) * 0.01;
     });
 
     renderer.render(scene, camera);

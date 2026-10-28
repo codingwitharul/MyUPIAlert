@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MyUPIAlert — 3D Glass UI Edition</title>
-  <meta name="description" content="Free, Offline UPI Voice Soundbox & Analytics for Android">
+  <title>MyUPIAlert | Free Offline Voice Soundbox for Android</title>
+  <meta name="description" content="Stop paying ₹200/month for hardware soundboxes. Turn any Android phone into an ultra-loud, 100% offline voice soundbox for all UPI apps with 13 Indian languages.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,113 +16,211 @@
   <canvas id="bg-canvas"></canvas>
 
   <div class="content-wrapper">
+
     <!-- Navbar -->
-    <nav class="glass-nav">
+    <nav class="navbar reveal">
       <div class="brand">
-        <div class="brand-logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            </svg>
-        </div>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="brand-icon">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
         <span>MyUPIAlert</span>
       </div>
       <div class="nav-links">
         <a href="#features">Features</a>
-        <a href="#demo">Demo</a>
-        <a href="https://github.com/codingwitharul/MyUPIAlert/releases/latest" class="btn-primary glass-btn">Download APK</a>
+        <a href="#comparison">Compare</a>
+        <a href="#demo">Live Demo</a>
+        <a href="https://github.com/codingwitharul/MyUPIAlert/releases/latest" class="btn-primary btn-sm">Download APK</a>
       </div>
     </nav>
 
     <!-- Hero Section -->
-    <header class="hero">
-      <div class="hero-text glass-card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
-        <div class="badge">V2.0 Gold Edition</div>
-        <h1>The Ultimate <span class="gradient-text">Offline</span> UPI Soundbox.</h1>
-        <p>Stop paying ₹200/month. Turn your spare Android phone into a high-powered, fully offline voice alert system with real-time financial dashboards.</p>
+    <header class="hero reveal">
+      <div class="hero-content">
+        <div class="badge">Version 2.0 Gold Edition is live</div>
+        <h1 class="hero-title">The Ultimate <span class="gradient-text">Offline</span><br>UPI Soundbox.</h1>
+        <p class="hero-subtitle">Stop paying ₹200/month. Turn your spare Android phone into a high-powered, fully offline voice alert system with real-time financial dashboards.</p>
 
         <div class="hero-actions">
-          <a href="https://github.com/codingwitharul/MyUPIAlert/releases/latest" class="btn-primary glow-btn">
+          <a href="https://github.com/codingwitharul/MyUPIAlert/releases/latest" class="btn-primary btn-lg glow">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            Download Free
+            Download Free APK
           </a>
-          <a href="https://github.com/codingwitharul/MyUPIAlert" class="btn-secondary glass-btn">
-            View Source
+          <a href="https://github.com/codingwitharul/MyUPIAlert" class="btn-secondary btn-lg" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            Star on GitHub
           </a>
+        </div>
+
+        <div class="hero-trust">
+          <p>100% Free & Open Source. Zero Ads. Zero Tracking.</p>
         </div>
       </div>
     </header>
 
     <!-- Features Section -->
-    <section id="features" class="features-grid">
-      <div class="feature-card glass-card" data-tilt data-tilt-max="10" data-tilt-glare data-tilt-max-glare="0.1">
-        <div class="icon-wrapper" style="background: rgba(236,72,153,0.2); color: #EC4899;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-        </div>
-        <h3>100% Free Forever</h3>
-        <p>No monthly rental fees, no hidden charges. Just download and use.</p>
+    <section id="features" class="section reveal">
+      <div class="section-header">
+        <h2>Engineered for Business</h2>
+        <p>Enterprise-grade reliability, built directly into your phone.</p>
       </div>
 
-      <div class="feature-card glass-card" data-tilt data-tilt-max="10" data-tilt-glare data-tilt-max-glare="0.1">
-        <div class="icon-wrapper" style="background: rgba(6,182,212,0.2); color: #06B6D4;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+      <div class="features-grid">
+        <div class="feature-card glass" data-tilt data-tilt-max="5" data-tilt-glare data-tilt-max-glare="0.1">
+          <div class="icon-box" style="color: #10B981; background: rgba(16,185,129,0.1);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          </div>
+          <h3>100% Free Forever</h3>
+          <p>No monthly rental fees, no hidden setup charges, and no SIM card required. Keep your hard-earned money.</p>
         </div>
-        <h3>13 Indian Languages</h3>
-        <p>Hindi, Tamil, Telugu, Marathi, and more. Localized voice alerts instantly.</p>
+
+        <div class="feature-card glass" data-tilt data-tilt-max="5" data-tilt-glare data-tilt-max-glare="0.1">
+          <div class="icon-box" style="color: #6366F1; background: rgba(99,102,241,0.1);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </div>
+          <h3>13 Indian Languages</h3>
+          <p>Instant localized voice alerts in English, Hindi, Tamil, Telugu, Kannada, Marathi, Gujarati, Bengali, and more.</p>
+        </div>
+
+        <div class="feature-card glass" data-tilt data-tilt-max="5" data-tilt-glare data-tilt-max-glare="0.1">
+          <div class="icon-box" style="color: #F43F5E; background: rgba(244,63,94,0.1);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          </div>
+          <h3>Universal App Support</h3>
+          <p>Intercepts alerts from PhonePe, Google Pay, Paytm, BHIM, Amazon Pay, and all major transactional bank SMS.</p>
+        </div>
+
+        <div class="feature-card glass" data-tilt data-tilt-max="5" data-tilt-glare data-tilt-max-glare="0.1">
+          <div class="icon-box" style="color: #F59E0B; background: rgba(245,158,11,0.1);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          </div>
+          <h3>200% Hardware Boost</h3>
+          <p>Uses low-level Android APIs to boost speaker loudness by +1500mB, cutting through noisy street and market chatter.</p>
+        </div>
+
+        <div class="feature-card glass" data-tilt data-tilt-max="5" data-tilt-glare data-tilt-max-glare="0.1">
+          <div class="icon-box" style="color: #8B5CF6; background: rgba(139,92,246,0.1);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+          </div>
+          <h3>Offline Dashboard</h3>
+          <p>Beautiful Jetpack Compose financial analytics, heatmaps, and hourly sales charts processed 100% locally on your device.</p>
+        </div>
+
+        <div class="feature-card glass" data-tilt data-tilt-max="5" data-tilt-glare data-tilt-max-glare="0.1">
+          <div class="icon-box" style="color: #14B8A6; background: rgba(20,184,166,0.1);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </div>
+          <h3>Absolute Privacy</h3>
+          <p>Zero cloud servers. Zero data collection. All parsing and SQLite storage stays on your hardware forever.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section id="comparison" class="section reveal">
+      <div class="section-header">
+        <h2>Why Switch?</h2>
+        <p>See how MyUPIAlert stacks up against the competition.</p>
       </div>
 
-      <div class="feature-card glass-card" data-tilt data-tilt-max="10" data-tilt-glare data-tilt-max-glare="0.1">
-        <div class="icon-wrapper" style="background: rgba(79,70,229,0.2); color: #4F46E5;">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-        </div>
-        <h3>Offline Analytics</h3>
-        <p>Track your daily earnings and insights directly on the device with zero cloud syncing.</p>
+      <div class="table-container glass">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Commercial Soundboxes</th>
+              <th class="highlight-col">MyUPIAlert</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Monthly Cost</strong></td>
+              <td class="negative">₹125 - ₹200 / month</td>
+              <td class="positive highlight-col">₹0 (Free Forever)</td>
+            </tr>
+            <tr>
+              <td><strong>App Lock-in</strong></td>
+              <td class="negative">Locked to 1 provider</td>
+              <td class="positive highlight-col">Universal (GPay, PhonePe, Bank SMS)</td>
+            </tr>
+            <tr>
+              <td><strong>Analytics</strong></td>
+              <td class="neutral">Basic PDF emails</td>
+              <td class="positive highlight-col">Live App Dashboard & Heatmaps</td>
+            </tr>
+            <tr>
+              <td><strong>Internet Required</strong></td>
+              <td class="negative">Yes (Constant SIM Data)</td>
+              <td class="positive highlight-col">No (100% Offline Parsing)</td>
+            </tr>
+            <tr>
+              <td><strong>Audio Customization</strong></td>
+              <td class="negative">None</td>
+              <td class="positive highlight-col">Speed, Pitch & 200% Loudness Boost</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
 
     <!-- Interactive Simulator -->
-    <section id="demo" class="simulator-section">
-      <div class="simulator glass-card" data-tilt data-tilt-max="2" data-tilt-glare data-tilt-max-glare="0.1">
-        <h2>Live 3D Soundbox Simulator</h2>
-        <p class="subtitle">Experience the crystal-clear announcements.</p>
+    <section id="demo" class="section reveal">
+      <div class="section-header">
+        <h2>Experience the Clarity</h2>
+        <p>Test the dynamic TTS engine right in your browser.</p>
+      </div>
 
-        <div class="sim-controls">
-          <div class="input-group">
-            <label>Amount (₹)</label>
-            <input type="number" id="sim-amount" value="500" class="glass-input">
-          </div>
-          <div class="input-group">
-            <label>Sender Name</label>
-            <input type="text" id="sim-sender" value="Rahul Kumar" class="glass-input">
-          </div>
-          <div class="input-group">
-            <label>Language</label>
-            <select id="sim-language" class="glass-input">
-              <!-- Options populated by JS -->
-            </select>
-          </div>
-        </div>
+      <div class="simulator-wrapper glass">
+        <div class="sim-phone">
+          <div class="sim-screen">
+            <div class="sim-header">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon></svg>
+              <span>Test Audio Output</span>
+            </div>
 
-        <button id="sim-play-btn" class="btn-primary glow-btn play-btn">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-          Simulate Payment
-        </button>
+            <div class="sim-body">
+              <div class="input-group">
+                <label>Amount (₹)</label>
+                <input type="number" id="sim-amount" value="500" class="sim-input">
+              </div>
+              <div class="input-group">
+                <label>Sender Name</label>
+                <input type="text" id="sim-sender" value="Rahul Kumar" class="sim-input">
+              </div>
+              <div class="input-group">
+                <label>Language</label>
+                <select id="sim-language" class="sim-input">
+                  <!-- Options populated by JS -->
+                </select>
+              </div>
 
-        <div id="sim-transcript" class="transcript-box glass-card">
-          Select options and press play...
+              <button id="sim-play-btn" class="sim-btn glow">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                Play Announcement
+              </button>
+
+              <div id="sim-transcript" class="sim-transcript">
+                <span class="placeholder-text">Press play to generate audio...</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <footer>
-      <p>MyUPIAlert v2.0 - Open Source Android Project.</p>
+    <footer class="footer reveal">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon></svg>
+          <span>MyUPIAlert</span>
+        </div>
+        <p>Built with ❤️ by the Open Source Community.</p>
+        <p class="text-sm">Licensed under MIT. Not affiliated with NPCI, Google, or PhonePe.</p>
+      </div>
     </footer>
   </div>
 
-  <!-- Scripts -->
-  <!-- Vanilla Tilt for Glass 3D Hover -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
-  <!-- Three.js for 3D Background -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="app.js"></script>
 </body>
