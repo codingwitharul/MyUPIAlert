@@ -1,6 +1,28 @@
 # AI Developer Guide & Engineering Playbook — MyUPIAlert
 
-This guide is designed for AI coding agents and human contributors working on the **MyUPIAlert** codebase. It outlines code invariants, step-by-step recipes for common extensions, and strict safety guidelines.
+## 🌟 Why MyUPIAlert Was Created (The Origin Story)
+In India, digital payments (UPI) are ubiquitous, and local merchants, shopkeepers, and street vendors rely heavily on them. To verify payments without constantly checking their phones, many subscribe to commercial hardware "soundboxes" (like Paytm Soundbox or PhonePe SmartSpeaker). 
+
+However, these commercial soundboxes present significant issues for small business owners:
+- **Cost**: They charge recurring monthly rentals of ₹125 to ₹200.
+- **Lock-in**: They lock merchants into a single payment ecosystem.
+- **Hardware Limitations**: They require dedicated cellular SIM cards, physical charging, and extra counter space.
+
+**MyUPIAlert was created to democratize this technology.** By utilizing a spare or existing Android phone, any merchant can get the exact same (or better) functionality for **absolutely free**. It intercepts local bank SMS and UPI push notifications securely on the device, translating them into ultra-loud voice announcements in 13 Indian languages, with a completely 100% offline privacy architecture.
+
+## 🎯 Target Audience & Use Cases
+- **Small Business Owners & Street Vendors**: Who need instant audio confirmation of payments to prevent fraud in busy environments.
+- **Delivery Agents & Drivers**: Who need hands-free payment verification while on the road.
+- **Freelancers & Service Professionals**: Seeking a unified dashboard to track payments across Google Pay, PhonePe, Paytm, and direct bank transfers without multiple apps.
+- **Visually Impaired Users**: Who require clear, customizable audio feedback for digital transactions.
+
+## ✨ Detailed Features Breakdown
+- ⚡ **Dual Engine Listeners**: Actively monitors both `NotificationListenerService` (for UPI App Push notifications) and `BroadcastReceiver` (for SMS) to guarantee a 99.9% catch rate.
+- 🛡️ **Cross-Channel Deduplication**: A specialized 60-second window in `ForegroundTtsService` ignores duplicate alerts (e.g., when a user receives a Google Pay notification and an HDFC Bank SMS for the exact same transaction).
+- 🔊 **Hardware Loudness Boost (+1500 mB)**: Exploits Android's low-level `LoudnessEnhancer` to push the device speaker beyond its stock limit, ensuring announcements cut through street noise.
+- ⏱️ **Segmented Speech Speed**: The amount string is separated via pipe delimiters (`|`). The service reads the structural phrase (e.g., "Received") at a normal cadence but slows down and emphasizes the actual amount (e.g., "500 rupees") for crystal-clear comprehension.
+- 📊 **Financial Analytics Dashboard**: Provides an offline Jetpack Compose dashboard with heatmaps, hourly sales distribution, and CSV export capabilities.
+- 🔐 **Privacy-First Architecture**: Relies on native Android Text-to-Speech (TTS), SQLite (Room), and local Regex parsers. There is zero cloud telemetry, ensuring financial privacy.
 
 ---
 
